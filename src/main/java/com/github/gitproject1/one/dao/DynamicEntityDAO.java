@@ -1,4 +1,4 @@
-package com.github.rreinert.project1.dao;
+package com.github.gitproject1.one.dao;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import org.eclipse.persistence.jpa.JpaHelper;
 import org.eclipse.persistence.queries.ReadAllQuery;
 import org.springframework.stereotype.Repository;
 
-import com.github.rreinert.project1.util.EntityManagerUtil;
+import com.github.gitproject1.one.util.EntityManagerUtil;
 
 @Repository(value="dynamicEntityDAO")
 public class DynamicEntityDAO {
@@ -68,7 +68,7 @@ public class DynamicEntityDAO {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public DynamicEntity find(final Class clazz, Object id) throws PersistenceException {
 		try {
-			return this.entityManager.find(clazz, id);
+			return (DynamicEntity) this.entityManager.find(clazz, id);
 		} catch (NoResultException e) {			
 			return null;
 		}

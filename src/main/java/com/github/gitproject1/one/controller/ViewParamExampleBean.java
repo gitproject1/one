@@ -1,4 +1,4 @@
-package com.github.rreinert.project1.controller;
+package com.github.gitproject1.one.controller;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,8 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.github.rreinert.project1.controller.columns.ColumnModel;
-import com.github.rreinert.project1.service.DynamicEntityService;
+import com.github.gitproject1.one.controller.columns.ColumnModel;
+import com.github.gitproject1.one.service.DynamicEntityService;
 
 @Component("viewParamExampleBean")
 @Scope("session")

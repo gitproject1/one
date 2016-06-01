@@ -1,4 +1,4 @@
-package com.github.rreinert.project1.controller.model;
+package com.github.gitproject1.one.controller.model;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -9,7 +9,7 @@ import java.util.Set;
 import org.eclipse.persistence.dynamic.DynamicEntity;
 import org.eclipse.persistence.exceptions.DynamicException;
 
-import com.github.rreinert.project1.controller.columns.ColumnModel;
+import com.github.gitproject1.one.controller.columns.ColumnModel;
 
 public class BaseDynamicEntity implements DynamicEntity, Map<String, Object>{
 	

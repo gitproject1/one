@@ -1,4 +1,4 @@
-package com.github.rreinert.project1.service;
+package com.github.gitproject1.one.service;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,8 +23,8 @@ import org.eclipse.persistence.tools.schemaframework.SchemaManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.github.rreinert.project1.dao.DynamicEntityDAO;
-import com.github.rreinert.project1.util.EntityManagerUtil;
+import com.github.gitproject1.one.dao.DynamicEntityDAO;
+import com.github.gitproject1.one.util.EntityManagerUtil;
 
 @Service("dynamicEntityService")
 public class DynamicEntityService {

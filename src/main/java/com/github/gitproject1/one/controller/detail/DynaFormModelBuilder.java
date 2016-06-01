@@ -1,4 +1,4 @@
-package com.github.rreinert.project1.controller.detail;
+package com.github.gitproject1.one.controller.detail;
 
 import java.beans.PropertyDescriptor;
 import java.util.Comparator;
@@ -12,7 +12,7 @@ import org.primefaces.extensions.model.dynaform.DynaFormLabel;
 import org.primefaces.extensions.model.dynaform.DynaFormModel;
 import org.primefaces.extensions.model.dynaform.DynaFormRow;
 
-import com.github.rreinert.project1.service.DynamicEntityService;
+import com.github.gitproject1.one.service.DynamicEntityService;
 
 public class DynaFormModelBuilder {
 	

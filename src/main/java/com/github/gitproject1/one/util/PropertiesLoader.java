@@ -1,4 +1,4 @@
-package com.github.rreinert.project1.util;
+package com.github.gitproject1.one.util;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package com.github.rreinert.project1.controller;
+package com.github.gitproject1.one.controller;
 import java.beans.PropertyDescriptor;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -15,11 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import com.github.rreinert.project1.controller.columns.ColumnModel;
-import com.github.rreinert.project1.controller.detail.DynaFormModelBuilder;
-import com.github.rreinert.project1.controller.detail.FormControlBuilder;
-import com.github.rreinert.project1.controller.model.BaseDynamicEntity;
-import com.github.rreinert.project1.service.DynamicEntityService;
+import com.github.gitproject1.one.controller.columns.ColumnModel;
+import com.github.gitproject1.one.controller.detail.DynaFormModelBuilder;
+import com.github.gitproject1.one.controller.detail.FormControlBuilder;
+import com.github.gitproject1.one.controller.model.BaseDynamicEntity;
+import com.github.gitproject1.one.service.DynamicEntityService;
 
 @Component("basicDetailExampleBean")
 @Scope("session")

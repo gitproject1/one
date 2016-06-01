@@ -1,4 +1,4 @@
-package com.github.rreinert.project1.controller.detail;
+package com.github.gitproject1.one.controller.detail;
 
 import java.io.Serializable;
 

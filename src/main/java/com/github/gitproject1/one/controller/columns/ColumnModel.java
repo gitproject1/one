@@ -1,4 +1,4 @@
-package com.github.rreinert.project1.controller.columns;
+package com.github.gitproject1.one.controller.columns;
 
 import java.io.Serializable;
 
