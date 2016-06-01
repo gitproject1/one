@@ -12,7 +12,7 @@
 	</listener>
 
 	<listener>
-		<listener-class>com.github.rreinert.project1.listener.ContextListener</listener-class>
+		<listener-class>com.github.gitproject1.one.listener.ContextListener</listener-class>
 	</listener>
 
 	<context-param>
