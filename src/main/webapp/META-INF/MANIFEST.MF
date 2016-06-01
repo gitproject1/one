@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Class-Path: commonj.sdo-2.1.1.jar eclipselink-2.5.0.jar el-api-2.2.jar
+  el-impl-2.2.jar javax.persistence-2.1.0.jar jsp-api-2.1.jar jstl-1.2
+ .jar mysql-connector-java-5.1.17.jar servlet-api-2.5.jar
+
