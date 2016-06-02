@@ -7,13 +7,22 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
 	template="/WEB-INF/template.xhtml">
+
 <h:head>
 </h:head>
+
 <h:body>
 	<h:form>
-		<p:menubar>
-	        <p:menuitem value="Data" action="ui/param?faces-redirect=true&amp;class=Issues"/>
-	    </p:menubar>
-    </h:form>
+		<h:panelGrid columns="2" id="Log" cellpadding="5">
+			<h:outputLabel for="login" value="Login: *" />
+			<p:inputText id="login" value="#{loginMB.login}" match="pwd2" label="Login" required="true" />
+
+			<h:outputLabel for="password" value="Password: *" />
+			<p:password id="password" value="#{loginMB.password}" label="Password" required="true" />
+		</h:panelGrid>
+
+		<p:commandButton value="Ok" />
+		<p:commandButton value="Cancel" />
+	</h:form>
 </h:body>
 </html>

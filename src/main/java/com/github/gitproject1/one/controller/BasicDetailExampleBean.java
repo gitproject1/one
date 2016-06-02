@@ -112,7 +112,7 @@ public class BasicDetailExampleBean implements Serializable{
 		try {
 			BaseDynamicEntity entity = this.model;
 			dynamicEntityService.save(entity.getDynamicEntity());
-			return "param.xhtml?class=" + currentClass + "&faces-redirect=true";
+			return "ui/param.xhtml?class=" + currentClass + "&faces-redirect=true";
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
