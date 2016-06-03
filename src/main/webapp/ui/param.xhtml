@@ -16,7 +16,7 @@
 </f:metadata>
 <h:body>
 	<h:outputLink 
-		value="ui/basicDetail.xhtml?faces-redirect=true">
+		value="basicDetail.xhtml?faces-redirect=true">
 			Create
 			<f:param name="id" value="0"/>
 			<f:param name="disabled" value="false"/>
@@ -25,7 +25,7 @@
 	<p:dataTable var="obj" value="#{viewParamExampleBean.data}">
 		<p:column>
 			<h:outputLink 
-				value="ui/basicDetail.xhtml?faces-redirect=true">
+				value="basicDetail.xhtml?faces-redirect=true">
 					Edit 
 					<f:param name="id" value="#{obj['id']}"/>
 					<f:param name="disabled" value="false"/>
@@ -34,7 +34,7 @@
 		</p:column>
 		<p:column>
 			<h:outputLink 
-				value="ui/basicDetail.xhtml?faces-redirect=true">
+				value="basicDetail.xhtml?faces-redirect=true">
 					View
 					<f:param name="id" value="#{obj['id']}"/>
 					<f:param name="disabled" value="true"/>

@@ -72,7 +72,15 @@ public class BasicDetailExampleBean implements Serializable{
 				this.model = new BaseDynamicEntity(dynamicEntity, columns);
 			}else{
 				DynamicEntity newInstance = dynamicEntityService.newInstance(currentClass);
-				this.model = new BaseDynamicEntity(newInstance, columns);
+				
+				List<ColumnModel> createColumns = new ArrayList<ColumnModel>();
+				for (ColumnModel columnModel : columns) {
+					if (!columnModel.getProperty().equalsIgnoreCase("id")){
+						createColumns.add(columnModel);
+					}
+				}
+				
+				this.model = new BaseDynamicEntity(newInstance, createColumns);
 			}
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -112,7 +120,7 @@ public class BasicDetailExampleBean implements Serializable{
 		try {
 			BaseDynamicEntity entity = this.model;
 			dynamicEntityService.save(entity.getDynamicEntity());
-			return "ui/param.xhtml?class=" + currentClass + "&faces-redirect=true";
+			return "/ui/param.xhtml?class=" + currentClass + "&faces-redirect=true";
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
