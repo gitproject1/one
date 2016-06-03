@@ -66,21 +66,14 @@ public class BasicDetailExampleBean implements Serializable{
 				columns.add(columnDescriptor);
 			}
 			
-			this.formModel = new DynaFormModelBuilder(currentClass, dynamicEntityService).build();
 			if(id != null && id.intValue() > 0) {
+				this.formModel = new DynaFormModelBuilder(currentClass, dynamicEntityService).build(true);
 				DynamicEntity dynamicEntity = dynamicEntityService.findById(currentClass, id);
 				this.model = new BaseDynamicEntity(dynamicEntity, columns);
 			}else{
+				this.formModel = new DynaFormModelBuilder(currentClass, dynamicEntityService).build(false);
 				DynamicEntity newInstance = dynamicEntityService.newInstance(currentClass);
-				
-				List<ColumnModel> createColumns = new ArrayList<ColumnModel>();
-				for (ColumnModel columnModel : columns) {
-					if (!columnModel.getProperty().equalsIgnoreCase("id")){
-						createColumns.add(columnModel);
-					}
-				}
-				
-				this.model = new BaseDynamicEntity(newInstance, createColumns);
+				this.model = new BaseDynamicEntity(newInstance, columns);
 			}
 		} catch (Exception e) {
 			throw new RuntimeException(e);

@@ -30,7 +30,7 @@ public class DynaFormModelBuilder {
 		this.dynamicEntityService = dynamicEntityService;
 	}
 	
-	public DynaFormModel build(){
+	public DynaFormModel build(boolean includeId){
 		DynaFormModel formModel = new DynaFormModel();
 		
 		Map<String, Object> parameters = new HashMap<String, Object>();
@@ -39,6 +39,9 @@ public class DynaFormModelBuilder {
 		List<DynamicEntity> attributes = dynamicEntityService.findEntities("select a from Attribute a where a.entity.name = :name order by a.orderNo", parameters, 0, 50);
 		for (DynamicEntity attribute : attributes) {
 			String name = (String) attribute.get("name");
+			if (name.equalsIgnoreCase("id") && !includeId){
+				continue;
+			}
 			String dataType = (String) attribute.get("dataType");
 			if (dataType.equalsIgnoreCase("date")){
 				continue; //TODO
