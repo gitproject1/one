@@ -9,7 +9,16 @@ public class ColumnModel implements Serializable {
 	private String property;
 	private String header;
 	private Class<?> type;
+	private Boolean editable;
 	
+	public Boolean getEditable() {
+		return editable;
+	}
+
+	public void setEditable(Boolean editable) {
+		this.editable = editable;
+	}
+
 	public ColumnModel() {}
 	
 	public String getProperty() {

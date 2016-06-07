@@ -11,9 +11,17 @@
 </h:head>
 <h:body>
 	<h:form>
+	
 		<p:menubar>
-	        <p:menuitem value="Data" action="ui/param?faces-redirect=true&amp;class=Issues"/>
+	        <p:menuitem value="Entities" action="ui/param?faces-redirect=true&amp;class=Entity"/>
+	        <p:menuitem value="Atributes" action="ui/param?faces-redirect=true&amp;class=Attribute"/>
+	        <p:submenu label="Data" icon="ui-icon-document">
+	        <p:menuitem value="Issues" action="ui/param?faces-redirect=true&amp;class=Issues"/>
+	        </p:submenu>
 	    </p:menubar>
+    
+    	<p:menu model="#{indexBean.model}" />
+    
     </h:form>
 </h:body>
 </html>

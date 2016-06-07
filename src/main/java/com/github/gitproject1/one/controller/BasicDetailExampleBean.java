@@ -56,9 +56,13 @@ public class BasicDetailExampleBean implements Serializable{
 			List<DynamicEntity> attributes = dynamicEntityService.findEntities("select a from Attribute a where a.entity.name = :name order by a.orderNo", parameters, 0, 50);
 			for (DynamicEntity attribute : attributes) {
 				ColumnModel columnDescriptor = new ColumnModel();
-				
-				String name = (String) attribute.get("name");
 				Class<?> type = getType(attribute);
+				String name = (String) attribute.get("name");
+				
+				columnDescriptor.setEditable(Boolean.TRUE);
+				if ("id".equalsIgnoreCase(name)){
+					columnDescriptor.setEditable(Boolean.FALSE);	
+				}
 				
 				columnDescriptor.setProperty(name);
 				columnDescriptor.setHeader(StringUtils.capitalize(name));
@@ -112,8 +116,15 @@ public class BasicDetailExampleBean implements Serializable{
 	public final String save(){
 		try {
 			BaseDynamicEntity entity = this.model;
-			dynamicEntityService.save(entity.getDynamicEntity());
+			DynamicEntity dynamicEntity = entity.getDynamicEntity();
+			dynamicEntityService.save(dynamicEntity);
+			
+			if ("Entity".equalsIgnoreCase(currentClass)) {
+				dynamicEntityService.saveDynamicEntity(dynamicEntity);
+			}
+			
 			return "/ui/param.xhtml?class=" + currentClass + "&faces-redirect=true";
+		
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

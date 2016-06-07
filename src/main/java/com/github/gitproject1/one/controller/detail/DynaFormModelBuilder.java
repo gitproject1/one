@@ -39,8 +39,10 @@ public class DynaFormModelBuilder {
 		List<DynamicEntity> attributes = dynamicEntityService.findEntities("select a from Attribute a where a.entity.name = :name order by a.orderNo", parameters, 0, 50);
 		for (DynamicEntity attribute : attributes) {
 			String name = (String) attribute.get("name");
-			if (name.equalsIgnoreCase("id") && !includeId){
-				continue;
+			if (name.equalsIgnoreCase("id")){
+				if (!includeId){
+					continue;
+				}
 			}
 			String dataType = (String) attribute.get("dataType");
 			if (dataType.equalsIgnoreCase("date")){
