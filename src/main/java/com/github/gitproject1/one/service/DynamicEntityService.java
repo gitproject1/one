@@ -197,12 +197,10 @@ public class DynamicEntityService {
 		DynamicType parentType = null;
 		try {
 			DynamicEntity parent = e.get("parent");
-			
 			if (parent != null) {
 				JPADynamicTypeBuilder parentBuilder = getDynamicTypeBuilder(parent);
 				parentType = parentBuilder.getType();
 			}
-			
 		} catch (Exception e2) {
 			e2.printStackTrace();
 		}
@@ -212,8 +210,10 @@ public class DynamicEntityService {
 		String packagePrefix = "";
 		try {
 			DynamicEntity folder = e.get("folder");
-			packagePrefix = folder.get("name");
-			packagePrefix = packagePrefix + ".";
+			if (folder != null) {
+				packagePrefix = folder.get("name");
+				packagePrefix = packagePrefix + ".";
+			}
 		} catch (Exception e2) {
 			e2.printStackTrace();
 		}
@@ -268,8 +268,10 @@ public class DynamicEntityService {
 	}
 	
 	private Class<?> getClassType(DynamicEntity attribute){
-		String type = attribute.get("dataType");
+		
 		Class<?> ret = null;
+		Object type = attribute.get("dataType");
+		
 		if (type.equals("String")){
 			return String.class; 
 		} else if (type.equals("Boolean")){
@@ -278,6 +280,8 @@ public class DynamicEntityService {
 			return Integer.class;
 		} else if (type.equals("Date")){
 			return Date.class;
+		}else if (type instanceof Class<?>) {
+			ret = (Class<?>) type;
 		}
 		//TODO
 		return ret;
@@ -468,6 +472,7 @@ public class DynamicEntityService {
 		
 		try {
 			
+			//Folder
 			DynamicEntity systemFolder = null;
 			DynamicEntity folder = findByName("Folder", "system");
 			
@@ -478,67 +483,114 @@ public class DynamicEntityService {
 				systemFolder.set("name", "system");
 				save(systemFolder);
 			}
-			
-			DynamicEntity issuesEntity = null;
-			DynamicEntity issues = findByName("Entity", "Entity");
-			if ( issues != null ){
-				issuesEntity = issues;
-			} else {
-				issuesEntity = newInstance("Entity");
-				issuesEntity.set("name", "Entity");
-				issuesEntity.set("folder", systemFolder);
-				save(issuesEntity);
-			}
-			
-			DynamicEntity descriptionAttribute = null;
-			DynamicEntity desc = findByNameAndEntity("Attribute", "name", "Entity");
+
+			DynamicEntity nameAttribute = null;
+			DynamicEntity desc = findByNameAndEntity("Attribute", "name", "Folder");
 			if ( desc != null ){
-				descriptionAttribute = desc;
+				nameAttribute = desc;
 			} else {
-				descriptionAttribute = newInstance("Attribute");
-				descriptionAttribute.set("name", "name");
-				descriptionAttribute.set("entity", issuesEntity);
-				descriptionAttribute.set("dataType", "String");
-				descriptionAttribute.set("orderNo", 2);
-				descriptionAttribute.set("editable", true);
-				save(descriptionAttribute);
-			}
-			
-			DynamicEntity createdAttribute = null;
-			DynamicEntity created = findByNameAndEntity("Attribute", "dataType", "Entity");
-			if ( created != null ){
-				createdAttribute = created;
-			} else {
-				createdAttribute = newInstance("Attribute");
-				createdAttribute.set("name", "dataType");
-				createdAttribute.set("entity", issuesEntity);
-				createdAttribute.set("dataType", "String");
-				createdAttribute.set("orderNo", 3);
-				createdAttribute.set("editable", true);
-				save(createdAttribute);
+				nameAttribute = newInstance("Attribute");
+				nameAttribute.set("name", "name");
+//				nameAttribute.set("entity", systemFolder);
+				nameAttribute.set("dataType", "String");
+				nameAttribute.set("orderNo", 1);
+				nameAttribute.set("editable", true);
+				save(nameAttribute);
 			}
 
-			DynamicEntity issueNumberAttribute = null;
-			DynamicEntity issueNo = findByNameAndEntity("Attribute", "orderNo", "Entity");
-			if ( issueNo != null ){
-				issueNumberAttribute = issueNo;
+			// Entity
+			DynamicEntity entityEntity = null;
+			DynamicEntity entity = findByName("Entity", "Entity");
+			if ( entity != null ){
+				entityEntity = entity;
 			} else {
-				issueNumberAttribute = newInstance("Attribute");
-				issueNumberAttribute.set("name", "orderNo");
-				issueNumberAttribute.set("entity", issuesEntity);
-				issueNumberAttribute.set("dataType", "Integer");
-				issueNumberAttribute.set("orderNo", 1);
-				issueNumberAttribute.set("editable", true);
-				save(issueNumberAttribute);
+				entityEntity = newInstance("Entity");
+				entityEntity.set("name", "Entity");
+				entityEntity.set("folder", systemFolder);
+				save(entityEntity);
+			}
+
+			DynamicEntity enameAttribute = null;
+			DynamicEntity edesc = findByNameAndEntity("Attribute", "name", "Entity");
+			if ( edesc != null ){
+				enameAttribute = desc;
+			} else {
+				enameAttribute = newInstance("Attribute");
+				enameAttribute.set("name", "name");
+				enameAttribute.set("entity", entityEntity);
+				enameAttribute.set("dataType", "String");
+				enameAttribute.set("orderNo", 1);
+				enameAttribute.set("editable", true);
+				save(enameAttribute);
 			}
 			
-			saveDynamicEntity(issuesEntity);
-		
+			
+//			DynamicEntity issuesEntity = null;
+//			DynamicEntity issues = findByName("Entity", "Entity");
+//			if ( issues != null ){
+//				issuesEntity = issues;
+//			} else {
+//				issuesEntity = newInstance("Entity");
+//				issuesEntity.set("name", "Entity");
+//				issuesEntity.set("folder", systemFolder);
+//				save(issuesEntity);
+//			}
+//
+//			DynamicEntity folderAttribute = null;
+//			DynamicEntity desc = findByNameAndEntity("Attribute", "name", "Entity");
+//			if ( desc != null ){
+//				folderAttribute = desc;
+//			} else {
+//				folderAttribute = newInstance("Attribute");
+//				folderAttribute.set("name", "folder");
+//				folderAttribute.set("entity", issuesEntity);
+//				folderAttribute.set("dataType", "String");
+//				folderAttribute.set("orderNo", 1);
+//				folderAttribute.set("editable", true);
+//				save(folderAttribute);
+//			}
+//			
+//			DynamicEntity createdAttribute = null;
+//			DynamicEntity created = findByNameAndEntity("Attribute", "dataType", "Entity");
+//			if ( created != null ){
+//				createdAttribute = created;
+//			} else {
+//				createdAttribute = newInstance("Attribute");
+//				createdAttribute.set("name", "dataType");
+//				createdAttribute.set("entity", issuesEntity);
+//				createdAttribute.set("dataType", "String");
+//				createdAttribute.set("orderNo", 3);
+//				createdAttribute.set("editable", true);
+//				save(createdAttribute);
+//			}
+//
+//			DynamicEntity issueNumberAttribute = null;
+//			DynamicEntity issueNo = findByNameAndEntity("Attribute", "orderNo", "Entity");
+//			if ( issueNo != null ){
+//				issueNumberAttribute = issueNo;
+//			} else {
+//				issueNumberAttribute = newInstance("Attribute");
+//				issueNumberAttribute.set("name", "orderNo");
+//				issueNumberAttribute.set("entity", issuesEntity);
+//				issueNumberAttribute.set("dataType", "Integer");
+//				issueNumberAttribute.set("orderNo", 4);
+//				issueNumberAttribute.set("editable", true);
+//				save(issueNumberAttribute);
+//			}
+//			
+//			saveDynamicEntity(issuesEntity);
+//		
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-
+	
+	public Class<?> getClass(String alias){
+		EntityManager em = EntityManagerUtil.getInstance().getEntityManager();
+		ClassDescriptor descriptor = JpaHelper.getEntityManager(em).getServerSession().getDescriptorForAlias(alias);
+		Class<?> javaClass = descriptor.getJavaClass();
+		return javaClass;
+	}
 	
 	private boolean systemEntitiesLoaded(JPADynamicHelper helper) {
 		DynamicType f = helper.getType("Folder");
