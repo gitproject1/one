@@ -1,6 +1,7 @@
 package com.github.gitproject1.one.service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +18,7 @@ import org.eclipse.persistence.dynamic.DynamicType;
 import org.eclipse.persistence.jpa.JpaHelper;
 import org.eclipse.persistence.jpa.dynamic.JPADynamicHelper;
 import org.eclipse.persistence.jpa.dynamic.JPADynamicTypeBuilder;
+import org.eclipse.persistence.mappings.OneToManyMapping;
 import org.eclipse.persistence.mappings.OneToOneMapping;
 import org.eclipse.persistence.queries.ReadAllQuery;
 import org.eclipse.persistence.tools.schemaframework.SchemaManager;
@@ -220,7 +222,7 @@ public class DynamicEntityService {
 		
 		String name = e.get("name");
 		Class<?> dynamicClass = dcl.createDynamicClass(packagePrefix + name);
-		String tableName = "mw_" + name.toLowerCase();
+		String tableName = "system_" + name.toLowerCase();
 		
 		return new JPADynamicTypeBuilder(dynamicClass, parentType, tableName);
 	}
@@ -311,17 +313,17 @@ public class DynamicEntityService {
 			DynamicClassLoader dcl = new DynamicClassLoader(Thread.currentThread().getContextClassLoader());
 			
 			Class<?> folderClass = dcl.createDynamicClass(packagePrefix + "Folder");
-			JPADynamicTypeBuilder folder = new JPADynamicTypeBuilder(folderClass, null, "mw_folder");
+			JPADynamicTypeBuilder folder = new JPADynamicTypeBuilder(folderClass, null, "system_folder");
 			
 			Class<?> entityClass = dcl.createDynamicClass(packagePrefix + "Entity");
-			JPADynamicTypeBuilder entity = new JPADynamicTypeBuilder(entityClass, null, "mw_entity");
+			JPADynamicTypeBuilder entity = new JPADynamicTypeBuilder(entityClass, null, "system_entity");
 			
 			Class<?> attributeClass = dcl.createDynamicClass(packagePrefix + "Attribute");
-			JPADynamicTypeBuilder attribute = new JPADynamicTypeBuilder(attributeClass, null, "mw_attribute");
+			JPADynamicTypeBuilder attribute = new JPADynamicTypeBuilder(attributeClass, null, "system_attribute");
 			
-			configureFolder(types, folder);
+			configureFolder(types, folder, attribute);
 			configureEntity(types, folder, entity, attribute);
-			configureAttribute(types, entity, attribute);
+			configureAttribute(types, folder, entity, attribute);
 	        
 	        DynamicType[] array = new DynamicType[types.size()];
 	        types.toArray(array); 
@@ -331,15 +333,19 @@ public class DynamicEntityService {
 			schemaManager.extendDefaultTables(true);
 			
 			loadSystemData();
-			loadSampleData();
+//			loadSampleData();
 		}
 	}
 	
-	private void configureFolder(List<DynamicType> types, JPADynamicTypeBuilder folder){
+	private void configureFolder(List<DynamicType> types, JPADynamicTypeBuilder folder, JPADynamicTypeBuilder attribute){
         folder.setPrimaryKeyFields("id");
         folder.addDirectMapping("id", Integer.class, "id");
         folder.addDirectMapping("name", String.class, "name");
         folder.addOneToOneMapping("parent", folder.getType(), "parent");
+        OneToManyMapping attrMapping = folder.addOneToManyMapping("attributes", attribute.getType(), "folder");
+        attrMapping.setCascadeAll(true);
+//        attrMapping.setIsPrivateOwned(true);
+
         folder.configureSequencing("Folder_seq", "id");
         types.add(folder.getType());
 	}
@@ -350,16 +356,21 @@ public class DynamicEntityService {
 		entity.addDirectMapping("name", String.class, "name");
 		entity.addOneToOneMapping("parent", entity.getType(), "parent");
 		OneToOneMapping folderMapping = entity.addOneToOneMapping("folder", folder.getType(), "folder");
-		folderMapping.setCascadeAll(true);
-		folderMapping.setIsPrivateOwned(true);
+//		folderMapping.setCascadeAll(true);
+//		folderMapping.setIsPrivateOwned(true);
+		
+		OneToManyMapping attrMapping = entity.addOneToManyMapping("attributes", attribute.getType(), "entity");
+        attrMapping.setCascadeAll(true);
+//        attrMapping.setIsPrivateOwned(true);
 		
 		entity.configureSequencing("Entity_seq", "id");
 		types.add(entity.getType());
 	}
 	
 	private void configureAttribute(List<DynamicType> types, 
-				JPADynamicTypeBuilder entity, 
-				JPADynamicTypeBuilder attribute) {
+			JPADynamicTypeBuilder folder,	
+			JPADynamicTypeBuilder entity, 
+			JPADynamicTypeBuilder attribute) {
         
 		attribute.setPrimaryKeyFields("id");
 		attribute.addDirectMapping("id", Integer.class, "id");
@@ -368,11 +379,38 @@ public class DynamicEntityService {
 		attribute.addDirectMapping("dataType", String.class, "dataType");
 		attribute.addDirectMapping("editable", Boolean.class, "editable");
 		
+		/*
 		OneToOneMapping entityMapping = attribute.addOneToOneMapping("entity", entity.getType(), "entity");
-		entityMapping.dontUseIndirection();
+//		entityMapping.dontUseIndirection();
+//		entityMapping.setCascadeAll(true);
+//		entityMapping.setIsPrivateOwned(true);
+
+		OneToOneMapping folderMapping = attribute.addOneToOneMapping("folder", entity.getType(), "folder");
+//		folderMapping.dontUseIndirection();
+//		folderMapping.setCascadeAll(true);
+//		folderMapping.setIsPrivateOwned(true);
+		
+		OneToOneMapping atributeMapping = attribute.addOneToOneMapping("attribute", entity.getType(), "attribute");
+//		atributeMapping.dontUseIndirection();
+//		atributeMapping.setCascadeAll(true);
+//		atributeMapping.setIsPrivateOwned(true);
+		*/
+		
+		OneToManyMapping attrMapping = attribute.addOneToManyMapping("attributes", attribute.getType(), "attribute");
+        attrMapping.setCascadeAll(true);
+        attrMapping.setIsPrivateOwned(true);
 		
 		attribute.addOneToOneMapping("associationEntity", entity.getType(), "associationEntity");
 		attribute.addDirectMapping("associationType", String.class, "associationType");
+		
+		attribute.addDirectMapping("folderId", int.class, "folder").readOnly();
+		attribute.addOneToOneMapping("folder", folder.getType(), "folder");
+
+		attribute.addDirectMapping("entityId", int.class, "entity").readOnly();
+		attribute.addOneToOneMapping("entity", entity.getType(), "entity");
+
+		attribute.addDirectMapping("attributeId", int.class, "attribute").readOnly();
+		attribute.addOneToOneMapping("attribute", attribute.getType(), "attribute");
 		
         attribute.configureSequencing("Attribute_seq", "id");
 		types.add(attribute.getType());
@@ -472,119 +510,74 @@ public class DynamicEntityService {
 		
 		try {
 			
-			//Folder
-			DynamicEntity systemFolder = null;
-			DynamicEntity folder = findByName("Folder", "system");
-			
-			if ( folder != null ){
-				systemFolder = folder;
-			} else {
-				systemFolder = newInstance("Folder");
-				systemFolder.set("name", "system");
-				save(systemFolder);
-			}
+			DynamicEntity systemFolder = loadSystemFolder();
+			loadSystemEntity(systemFolder);
 
-			DynamicEntity nameAttribute = null;
-			DynamicEntity desc = findByNameAndEntity("Attribute", "name", "Folder");
-			if ( desc != null ){
-				nameAttribute = desc;
-			} else {
-				nameAttribute = newInstance("Attribute");
-				nameAttribute.set("name", "name");
-//				nameAttribute.set("entity", systemFolder);
-				nameAttribute.set("dataType", "String");
-				nameAttribute.set("orderNo", 1);
-				nameAttribute.set("editable", true);
-				save(nameAttribute);
-			}
-
-			// Entity
-			DynamicEntity entityEntity = null;
-			DynamicEntity entity = findByName("Entity", "Entity");
-			if ( entity != null ){
-				entityEntity = entity;
-			} else {
-				entityEntity = newInstance("Entity");
-				entityEntity.set("name", "Entity");
-				entityEntity.set("folder", systemFolder);
-				save(entityEntity);
-			}
-
-			DynamicEntity enameAttribute = null;
-			DynamicEntity edesc = findByNameAndEntity("Attribute", "name", "Entity");
-			if ( edesc != null ){
-				enameAttribute = desc;
-			} else {
-				enameAttribute = newInstance("Attribute");
-				enameAttribute.set("name", "name");
-				enameAttribute.set("entity", entityEntity);
-				enameAttribute.set("dataType", "String");
-				enameAttribute.set("orderNo", 1);
-				enameAttribute.set("editable", true);
-				save(enameAttribute);
-			}
-			
-			
-//			DynamicEntity issuesEntity = null;
-//			DynamicEntity issues = findByName("Entity", "Entity");
-//			if ( issues != null ){
-//				issuesEntity = issues;
-//			} else {
-//				issuesEntity = newInstance("Entity");
-//				issuesEntity.set("name", "Entity");
-//				issuesEntity.set("folder", systemFolder);
-//				save(issuesEntity);
-//			}
-//
-//			DynamicEntity folderAttribute = null;
-//			DynamicEntity desc = findByNameAndEntity("Attribute", "name", "Entity");
-//			if ( desc != null ){
-//				folderAttribute = desc;
-//			} else {
-//				folderAttribute = newInstance("Attribute");
-//				folderAttribute.set("name", "folder");
-//				folderAttribute.set("entity", issuesEntity);
-//				folderAttribute.set("dataType", "String");
-//				folderAttribute.set("orderNo", 1);
-//				folderAttribute.set("editable", true);
-//				save(folderAttribute);
-//			}
-//			
-//			DynamicEntity createdAttribute = null;
-//			DynamicEntity created = findByNameAndEntity("Attribute", "dataType", "Entity");
-//			if ( created != null ){
-//				createdAttribute = created;
-//			} else {
-//				createdAttribute = newInstance("Attribute");
-//				createdAttribute.set("name", "dataType");
-//				createdAttribute.set("entity", issuesEntity);
-//				createdAttribute.set("dataType", "String");
-//				createdAttribute.set("orderNo", 3);
-//				createdAttribute.set("editable", true);
-//				save(createdAttribute);
-//			}
-//
-//			DynamicEntity issueNumberAttribute = null;
-//			DynamicEntity issueNo = findByNameAndEntity("Attribute", "orderNo", "Entity");
-//			if ( issueNo != null ){
-//				issueNumberAttribute = issueNo;
-//			} else {
-//				issueNumberAttribute = newInstance("Attribute");
-//				issueNumberAttribute.set("name", "orderNo");
-//				issueNumberAttribute.set("entity", issuesEntity);
-//				issueNumberAttribute.set("dataType", "Integer");
-//				issueNumberAttribute.set("orderNo", 4);
-//				issueNumberAttribute.set("editable", true);
-//				save(issueNumberAttribute);
-//			}
-//			
-//			saveDynamicEntity(issuesEntity);
-//		
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
+	private DynamicEntity loadSystemEntity(DynamicEntity systemFolder) {
+		DynamicEntity systemEntity = null;
+
+		try {
+			DynamicEntity entity = findByName("Entity", "Entity");
+			if ( entity != null ){
+				systemEntity = entity;
+			} else {
+				systemEntity = newInstance("Entity");
+				systemEntity.set("name", "Entity");
+				systemEntity.set("folder", systemFolder);
+				
+				DynamicEntity enameAttribute = newInstance("Attribute");
+				enameAttribute.set("name", "name");
+				enameAttribute.set("dataType", "String");
+				enameAttribute.set("orderNo", 1);
+				enameAttribute.set("editable", true);
+				enameAttribute.set("entity", systemEntity);
+				
+				systemEntity.<Collection<DynamicEntity>> get("attributes").add(enameAttribute);
+
+				save(systemEntity);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return systemEntity;
+	}
+
+	private DynamicEntity loadSystemFolder() {
+		DynamicEntity systemFolder = null;
+
+		try {
+			DynamicEntity folder = findByName("Folder", "system");
+			if ( folder != null ){
+				systemFolder = folder;
+			} else {
+				systemFolder = newInstance("Folder");
+				systemFolder.set("name", "system");
+				
+				DynamicEntity nameAttribute = newInstance("Attribute");
+				nameAttribute.set("name", "name");
+				nameAttribute.set("dataType", "String");
+				nameAttribute.set("orderNo", 1);
+				nameAttribute.set("editable", true);
+				nameAttribute.set("folder", systemFolder);
+				
+				systemFolder.<Collection<DynamicEntity>> get("attributes").add(nameAttribute);
+				
+				save(systemFolder);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return systemFolder;
+	}
+
 	public Class<?> getClass(String alias){
 		EntityManager em = EntityManagerUtil.getInstance().getEntityManager();
 		ClassDescriptor descriptor = JpaHelper.getEntityManager(em).getServerSession().getDescriptorForAlias(alias);
