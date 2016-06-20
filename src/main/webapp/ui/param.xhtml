@@ -1,19 +1,18 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
+<html xmlns="http://www.w3.org/1999/xhtml" 
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 
 <ui:composition template="/WEB-INF/template.xhtml">
-
 	<f:metadata>
 		<f:viewParam name="class" value="#{viewParamExampleBean.currentClass}"></f:viewParam>
 		<f:event listener="#{viewParamExampleBean.onPreRender}" type="preRenderView"></f:event>
 	</f:metadata>
-
-	<ui:define name="container">        
+	
+	<ui:define name="container"> 
         <h:outputLink value="basicDetail.xhtml?faces-redirect=true">
 				Create
 				<f:param name="id" value="0"/>
