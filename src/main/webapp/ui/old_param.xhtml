@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/template.xhtml">
+
+<h:head>
+</h:head>
+<f:metadata>
+	<f:viewParam name="class" value="#{viewParamExampleBean.currentClass}"></f:viewParam>
+	<f:event listener="#{viewParamExampleBean.onPreRender}" type="preRenderView"></f:event>
+</f:metadata>
+<h:body>
+	<h:outputLink 
+		value="basicDetail.xhtml?faces-redirect=true">
+			Create
+			<f:param name="id" value="0"/>
+			<f:param name="disabled" value="false"/>
+			<f:param name="class" value="#{viewParamExampleBean.currentClass}"/>
+	</h:outputLink>
+	<p:dataTable var="obj" value="#{viewParamExampleBean.data}">
+		<p:column>
+			<h:outputLink 
+				value="basicDetail.xhtml?faces-redirect=true">
+					Edit 
+					<f:param name="id" value="#{obj['id']}"/>
+					<f:param name="disabled" value="false"/>
+					<f:param name="class" value="#{viewParamExampleBean.currentClass}"/>
+			</h:outputLink>
+		</p:column>
+		<p:column>
+			<h:outputLink 
+				value="basicDetail.xhtml?faces-redirect=true">
+					View
+					<f:param name="id" value="#{obj['id']}"/>
+					<f:param name="disabled" value="true"/>
+					<f:param name="class" value="#{viewParamExampleBean.currentClass}"/>
+			</h:outputLink>
+		</p:column>
+		<p:columns 
+			value="#{viewParamExampleBean.columns}" 
+			var="column"
+			headerText="#{column.header}">
+			<p:selectBooleanCheckbox 
+				value="#{obj[column.property]}" 
+				disabled="true"
+				rendered="#{column.type.toString() == 'boolean'}"/>
+			<h:outputText value="#{obj[column.property]}" rendered="#{column.type.toString() != 'boolean'}" />
+		</p:columns>
+	</p:dataTable>
+</h:body>
+</html>

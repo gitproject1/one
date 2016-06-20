@@ -1,0 +1,36 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<p:lightBox style="text-align:center;margin-top:20px;">
+		<h:outputLink value="#" title="Nature 1" style="margin-bottom:5px;">
+			<p:graphicImage name="/resources/main/images/warning.png"
+				width="150" />
+		</h:outputLink>
+
+		<h:outputLink value="#" title="Nature 2" style="margin-bottom:2px;">
+			<p:graphicImage name="/resources/main/images/warning.png"
+				width="150" />
+		</h:outputLink>
+
+		<h:outputLink value="#" title="Nature 3" style="margin-bottom:2px;">
+			<p:graphicImage name="/resources/main/images/warning.png"
+				width="150" />
+		</h:outputLink>
+
+		<h:outputLink
+			value="#{request.contextPath}/resources/demo/images/nature/nature4.jpg"
+			title="Nature 4" style="margin-bottom:2px;">
+			<p:graphicImage name="/resources/main/images/warning.png"
+				width="150" />
+		</h:outputLink>
+	</p:lightBox>
+
+	<p:commandButton value="Show Dialog" onclick="PF('dlg').show();"
+		type="button" style="margin-top:10px" />
+      
+	
+
+</html>

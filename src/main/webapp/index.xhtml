@@ -6,70 +6,9 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui">
 
-<ui:composition template="/WEB-INF/template2.xhtml">
-	<ui:define name="menu">
-		<p:menubar>
-			<p:menuitem value="Folders" action="ui/param?faces-redirect=true&amp;class=Folder" />
-			<p:menuitem value="Entities" action="ui/param?faces-redirect=true&amp;class=Entity" />
-			<p:menuitem value="Atributes" action="ui/param?faces-redirect=true&amp;class=Attribute" />
-			<p:submenu label="Data" icon="ui-icon-document">
-				<p:menuitem value="Issues" action="ui/param?faces-redirect=true&amp;class=Issues" />
-			</p:submenu>
-		</p:menubar>
-		
-		
-	</ui:define>
+<ui:composition template="/WEB-INF/template.xhtml">
 	<ui:define name="container">        
             container       
     </ui:define>  
-	<ui:define name="menu-left">        
-        <p:accordionPanel>
-			<p:tab title="Menu 1">
-				<br />
-				<p:calendar mode="inline" navigator="none" />
-				<br />
-			</p:tab>
-	
-			<p:tab title="Menu 2">
-				<h:outputText value="Menu 2 Content" />
-			</p:tab>
-	
-			<p:tab title="Menu 3">
-				<h:outputText value="Menu 3 Content" />
-			</p:tab>
-		</p:accordionPanel>       
-    </ui:define>
-	<ui:define name="menu-right">        
-       <p:lightBox style="text-align:center;margin-top:20px;">
-			<h:outputLink value="#" title="Nature 1" style="margin-bottom:5px;">
-				<p:graphicImage name="/resources/main/images/warning.png"
-					width="150" />
-			</h:outputLink>
-
-			<h:outputLink value="#" title="Nature 2" style="margin-bottom:2px;">
-				<p:graphicImage name="/resources/main/images/warning.png"
-					width="150" />
-			</h:outputLink>
-
-			<h:outputLink value="#" title="Nature 3" style="margin-bottom:2px;">
-				<p:graphicImage name="/resources/main/images/warning.png"
-					width="150" />
-			</h:outputLink>
-
-			<h:outputLink
-				value="#{request.contextPath}/resources/demo/images/nature/nature4.jpg"
-				title="Nature 4" style="margin-bottom:2px;">
-				<p:graphicImage name="/resources/main/images/warning.png"
-					width="150" />
-			</h:outputLink>
-		</p:lightBox>
-
-		<p:commandButton value="Show Dialog" onclick="PF('dlg').show();"
-			type="button" style="margin-top:10px" />
-       
-    </ui:define>
-	<ui:define name="footer">        
-            Footer        
-    </ui:define>
 </ui:composition>
 </html>
