@@ -43,7 +43,8 @@ public class ViewParamExampleBean implements Serializable{
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("name", currentClass);
 
-		List<DynamicEntity> attributes = dynamicEntityService.findEntities("select a from Attribute a where a.entity.name = :name order by a.orderNo", parameters, 0, 50);
+		String hql = "select a from Attribute a where a.entity.name = :name order by a.orderNo";
+		List<DynamicEntity> attributes = dynamicEntityService.findEntities(hql, parameters, 0, 50);
 		for (DynamicEntity attribute : attributes) {
 			ColumnModel columnDescriptor = new ColumnModel();
 			
